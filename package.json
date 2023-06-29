@@ -1,0 +1,21 @@
+{
+  "name": "dns-webpack-plugin",
+  "version": "1.0.0",
+  "description": "webpack插件用于dns优化",
+  "main": "index.js",
+  "types": "typings.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["webpack", "dns","dns-prefetch","dns-prefetch-webpack-plugin","dns-webpack-plugin","dns-prefetch-webpack-plugin","dns-webpack"],
+  "author": "liaoxf (https://github.com/Leslie-project)",
+  "license": "ISC",
+  "dependencies": { 
+    "node-html-parser": "^6.1.5",
+    "url-regex": "^5.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Leslie-project/dns-webpack-plugin.git"
+  }
+}
