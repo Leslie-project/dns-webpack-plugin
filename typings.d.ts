@@ -4,6 +4,7 @@ declare class DnsOptimizationWebpackPlugin {
   constructor(options?: DnsOptimizationWebpackPlugin.Options);
   options?: DnsOptimizationWebpackPlugin.Options;
   name: string;
+  scanFileType: string[];
   apply(compiler: any): void;
 }
 
@@ -16,7 +17,6 @@ declare namespace DnsOptimizationWebpackPlugin {
   interface Options {
     /**
      * 传入排除的扫描文件类型
-     * todo: 未实现
      */
     exclude?: excludeFileType[];
 
@@ -27,7 +27,6 @@ declare namespace DnsOptimizationWebpackPlugin {
 
     /**
      * 手动传入DNS预解析的域名
-     * todo: 未实现
      */
     dns?: string[];
   }

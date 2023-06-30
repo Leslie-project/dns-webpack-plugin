@@ -19,6 +19,9 @@ function isPlainObject(value) {
 
 class DnsOptimizationWebpackPlugin {
   name = 'dns-optimization-webpack-plugin';
+
+  scanFileType = ['html', 'js', 'css'];
+
   /**
    * @param {DnsWebpackPluginOptions} [options]
    */
@@ -59,7 +62,6 @@ class DnsOptimizationWebpackPlugin {
    * @param {*} compilation
    */
   handleInitial(compilation) {
-    console.log('handleInitial');
     const stats = compilation.getStats();
     if (stats.hasErrors()) {
       return;
@@ -86,7 +88,8 @@ class DnsOptimizationWebpackPlugin {
   optimizateFiles() {
     //遍历整个目录，找到所有的文件
     try {
-      const files = glob.sync(`${this.outputPath}/**/*.{html,js,css}`);
+      let scanFileTypes = this.filterScanFilesType();
+      let files = glob.sync(`${this.outputPath}/**/*.{${scanFileTypes}}`);
       const urlList = [];
       files.forEach(file => {
         urlList.push(...this.matchUrlFromFile(file));
@@ -123,20 +126,41 @@ class DnsOptimizationWebpackPlugin {
    * @param {*} urlList
    */
   handleHtmlFile(urlList) {
+    //合并用户配置的dns
+    this.options.dns && urlList.push(...Array.from(new Set(this.options.dns)));
+
     const files = glob.sync(`${this.outputPath}/**/*.html`);
-    if (files.length === 0) return;
-    const links = urlList.map(url => `<link rel="dns-prefetch" href="${url}">`);
+    if (files.length === 0) return; 
+
+    let filterUrlList = urlList.filter(url => urlRegex().test(url));
+    const links = filterUrlList.map(
+      url =>  `<link rel="dns-prefetch" href="${url}">`
+    ); 
     if (links.length === 0) return;
+
     for (const file of files) {
       const fileContent = fs.readFileSync(file, 'utf8');
       const root = parse(fileContent);
       const head = root.querySelector('head');
-      head?.insertAdjacentHTML('afterbegin', links);
+      head?.insertAdjacentHTML('afterbegin', links.join(''));
       fs.writeFileSync(
         this.options.as ? path.join(this.outputPath, this.options.as) : file,
         root.toString()
       );
     }
+  }
+
+  /**
+   *
+   * @returns example 'html,js,css'
+   */
+  filterScanFilesType() {
+    const excludes = this.options.exclude || [];
+    let result = this.scanFileType;
+    excludes.forEach(item => {
+      result = result.filter(fileType => fileType !== item);
+    });
+    return result.join(',');
   }
 }
 
