@@ -1,6 +1,6 @@
 {
   "name": "dns-webpack-plugin",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "webpack插件用于dns优化",
   "main": "index.js",
   "types": "typings.d.ts",
@@ -17,7 +17,7 @@
     "dns-webpack"
   ],
   "author": "liaoxf (https://github.com/Leslie-project)",
-  "license": "ISC", 
+  "license": "ISC",
   "dependencies": {
     "glob": "^10.3.1",
     "node-html-parser": "^6.1.5",
